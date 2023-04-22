@@ -4,12 +4,7 @@ package com.arextest.schedule.service;
 import com.arextest.model.mock.AREXMocker;
 import com.arextest.model.mock.MockCategoryType;
 import com.arextest.model.mock.Mocker.Target;
-import com.arextest.model.replay.PagedRequestType;
-import com.arextest.model.replay.PagedResponseType;
-import com.arextest.model.replay.QueryCaseCountResponseType;
-import com.arextest.model.replay.ViewRecordRequestType;
-import com.arextest.model.replay.ViewRecordResponseType;
-import com.arextest.schedule.common.CommonConstant;
+import com.arextest.model.replay.*;
 import com.arextest.schedule.client.HttpWepServiceApiClient;
 import com.arextest.schedule.common.CommonConstant;
 import com.arextest.schedule.model.*;
@@ -17,7 +12,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -52,17 +46,31 @@ public class ReplayCaseRemoteLoadService {
     public int queryCaseCount(ReplayActionItem replayActionItem) {
         try {
             int caseCountLimit = replayActionItem.getParent().getCaseCountLimit();
-            PagedRequestType request = buildPagingSearchCaseRequest(replayActionItem, caseCountLimit);
-            QueryCaseCountResponseType responseType =
-                    wepApiClientService.jsonPost(countByRangeUrl, request, QueryCaseCountResponseType.class);
-            if (responseType == null || responseType.getResponseStatusType().hasError()) {
-                return EMPTY_SIZE;
+            int caseCount = 0;
+            // DubboProvider
+            if (replayActionItem.getTargetInstance().stream().anyMatch(ele -> "dubbo".equalsIgnoreCase(ele.getProtocol()))) {
+                ReplayActionItem cloneReplayActionItem = objectMapper.readValue(objectMapper.writeValueAsString(replayActionItem), ReplayActionItem.class);
+                cloneReplayActionItem.setActionType(MockCategoryType.DUBBO_PROVIDER.getName());
+                cloneReplayActionItem.setParent(replayActionItem.getParent());
+                cloneReplayActionItem.setTargetInstance(replayActionItem.getTargetInstance());
+                caseCount = getCaseCount(cloneReplayActionItem, caseCountLimit);
             }
-            return Math.min(caseCountLimit, (int) responseType.getCount());
+            caseCount += getCaseCount(replayActionItem, caseCountLimit);
+            return Math.min(caseCountLimit, caseCount);
         } catch (Exception e) {
             LOGGER.error("query case count error,request: {} ", replayActionItem.getId(), e);
         }
         return EMPTY_SIZE;
+    }
+
+    public int getCaseCount(ReplayActionItem replayActionItem, int caseCountLimit) {
+        PagedRequestType request = buildPagingSearchCaseRequest(replayActionItem, caseCountLimit);
+        QueryCaseCountResponseType responseType =
+                wepApiClientService.jsonPost(countByRangeUrl, request, QueryCaseCountResponseType.class);
+        if (responseType == null || responseType.getResponseStatusType().hasError()) {
+            return EMPTY_SIZE;
+        }
+        return Math.min(caseCountLimit, (int) responseType.getCount());
     }
 
     public ReplayActionCaseItem viewReplayLoad(ReplayActionCaseItem caseItem, String sourceProvider) {
@@ -113,14 +121,39 @@ public class ReplayCaseRemoteLoadService {
 
     public List<ReplayActionCaseItem> pagingLoad(long beginTimeMills, long endTimeMills,
                                                  ReplayActionItem replayActionItem, int caseCountLimit) {
+        List<ReplayActionCaseItem> totalCaseItemList = new ArrayList<>();
+        if (replayActionItem.getTargetInstance().stream().anyMatch(ele -> "dubbo".equalsIgnoreCase(ele.getProtocol()))) {
+            ReplayActionItem cloneReplayActionItem = null;
+            try {
+                cloneReplayActionItem = objectMapper.readValue(objectMapper.writeValueAsString(replayActionItem), ReplayActionItem.class);
+                cloneReplayActionItem.setActionType(MockCategoryType.DUBBO_PROVIDER.getName());
+                cloneReplayActionItem.setParent(replayActionItem.getParent());
+                cloneReplayActionItem.setTargetInstance(replayActionItem.getTargetInstance());
+                List<ReplayActionCaseItem> dubboReplayActionCaseItem = getCaseItemList(beginTimeMills, endTimeMills, cloneReplayActionItem, caseCountLimit);
+                if (!dubboReplayActionCaseItem.isEmpty()) {
+                    totalCaseItemList.addAll(dubboReplayActionCaseItem);
+                    caseCountLimit -= dubboReplayActionCaseItem.size();
+                }
+            } catch (JsonProcessingException e) {
+                LOGGER.error("Serializing ReplayActionItem failed app id:{}, ReplayActionItemId:{}",
+                        replayActionItem.getAppId(), replayActionItem.getId());
+            }
+        }
+        List<ReplayActionCaseItem> caseItemList = getCaseItemList(beginTimeMills, endTimeMills, replayActionItem, caseCountLimit);
+        if (!caseItemList.isEmpty()) {
+            totalCaseItemList.addAll(caseItemList);
+        }
+        return totalCaseItemList;
+    }
+
+    public List<ReplayActionCaseItem> getCaseItemList(long beginTimeMills, long endTimeMills, ReplayActionItem replayActionItem, int caseCountLimit) {
         PagedRequestType requestType = buildPagingSearchCaseRequest(replayActionItem, caseCountLimit);
+        PagedResponseType responseType;
         requestType.setBeginTime(beginTimeMills);
         requestType.setEndTime(endTimeMills);
-        PagedResponseType responseType;
         long beginTime = System.currentTimeMillis();
         responseType = wepApiClientService.jsonPost(replayCaseUrl, requestType, PagedResponseType.class);
         long timeUsed = System.currentTimeMillis() - beginTime;
-        consoleLogService.onConsoleLogEvent(timeUsed, LogType.FIND_CASE.getValue(), null, replayActionItem);
         LOGGER.info("get replay case app id:{},time used:{} ms, operation:{}",
                 requestType.getAppId(),
                 timeUsed, requestType.getOperation()
