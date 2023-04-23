@@ -1,7 +1,7 @@
 package com.arextest.schedule.web.controller;
 
-import com.arextest.schedule.mdc.MDCTracer;
 import com.arextest.schedule.common.CommonConstant;
+import com.arextest.schedule.mdc.MDCTracer;
 import com.arextest.schedule.model.CommonResponse;
 import com.arextest.schedule.model.DebugRequestItem;
 import com.arextest.schedule.model.plan.BuildReplayPlanRequest;
@@ -15,13 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -47,20 +41,27 @@ public class ReplayPlanController {
 
     @PostMapping(value = "/api/createPlan")
     @ResponseBody
-    public CommonResponse createPlanPost(@RequestBody BuildReplayPlanRequest request) {
-        return createPlan(request);
-    }
-
-    @GetMapping(value = "/api/createPlan")
-    @ResponseBody
-    public CommonResponse createPlanGet(BuildReplayPlanRequest request) {
-        return createPlan(request);
+    public CommonResponse createPlan(@RequestBody BuildReplayPlanRequest request) {
+        if (request == null) {
+            return CommonResponse.badResponse("The request empty not allowed");
+        }
+        try {
+            MDCTracer.addAppId(request.getAppId());
+            fillOptionalValueIfRequestMissed(request);
+            return planProduceService.createPlan(request);
+        } catch (Throwable e) {
+            LOGGER.error("create plan error: {} , request: {}", e.getMessage(), request, e);
+            return CommonResponse.badResponse("create plan error！" + e.getMessage());
+        } finally {
+            planProduceService.removeCreating(request.getAppId(), request.getTargetEnv());
+            MDCTracer.clear();
+        }
     }
 
     @GetMapping("/api/stopPlan")
     @ResponseBody
-    public CommonResponse stopPlan(String planId) {
-        planProduceService.stopPlan(planId);
+    public CommonResponse stopPlan(String planId, String remark) {
+        planProduceService.stopPlan(planId, remark);
         return CommonResponse.successResponse("success", null);
     }
 
