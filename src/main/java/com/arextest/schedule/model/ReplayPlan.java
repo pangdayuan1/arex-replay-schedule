@@ -68,4 +68,7 @@ public class ReplayPlan {
     @JsonIgnore
     private int caseCountLimit;
 
+    @JsonIgnore
+    private String errorMessage;
+
 }

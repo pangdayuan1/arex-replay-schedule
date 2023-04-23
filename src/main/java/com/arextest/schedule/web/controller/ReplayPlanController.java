@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author jmo
@@ -37,7 +38,8 @@ public class ReplayPlanController {
     @Resource
     private DebugRequestService debugRequestService;
 
-    @PostMapping("/api/createPlan")
+
+    @PostMapping(value = "/api/createPlan")
     @ResponseBody
     public CommonResponse createPlan(@RequestBody BuildReplayPlanRequest request) {
         if (request == null) {
@@ -109,6 +111,23 @@ public class ReplayPlanController {
         }
         if (StringUtils.isBlank(request.getPlanName())) {
             request.setPlanName(request.getAppId() + "_" + new SimpleDateFormat("MMdd_HH:mm").format(toDate));
+        }
+    }
+
+    private CommonResponse createPlan(BuildReplayPlanRequest request) {
+        if (request == null) {
+            return CommonResponse.badResponse("The request empty not allowed");
+        }
+        try {
+            MDCTracer.addAppId(request.getAppId());
+            fillOptionalValueIfRequestMissed(request);
+            return planProduceService.createPlan(request);
+        } catch (Throwable e) {
+            LOGGER.error("create plan error: {} , request: {}", e.getMessage(), request, e);
+            return CommonResponse.badResponse("create plan error！" + e.getMessage());
+        } finally {
+            MDCTracer.clear();
+            planProduceService.removeCreating(request.getAppId());
         }
     }
 }

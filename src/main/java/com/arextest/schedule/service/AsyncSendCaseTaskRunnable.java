@@ -36,6 +36,7 @@ final class AsyncSendCaseTaskRunnable extends AbstractTracedRunnable {
     protected void doWithTracedRunning() {
         // TODO: use send time decrease or increase the sendLimiter of replay case
         boolean success = false;
+        Throwable t = null;
         try {
             MDCTracer.addDetailId(caseItem.getId());
             success = this.replaySender.send(caseItem);
@@ -43,6 +44,7 @@ final class AsyncSendCaseTaskRunnable extends AbstractTracedRunnable {
             transmitService.updateSendResult(caseItem, success ? CaseSendStatusType.SUCCESS :
                     CaseSendStatusType.EXCEPTION_FAILED);
         } catch (Throwable throwable) {
+            t = throwable;
             LOGGER.error("async run sender Id: {} , error: {}", caseItem.getId(),
                     throwable.getMessage(), throwable);
             transmitService.updateSendResult(caseItem, CaseSendStatusType.EXCEPTION_FAILED);
@@ -52,6 +54,9 @@ final class AsyncSendCaseTaskRunnable extends AbstractTracedRunnable {
             }
             groupSentLatch.countDown();
             limiter.release(success);
+            caseItem.buildParentErrorMessage(
+                    t != null ? t.getMessage() : CaseSendStatusType.EXCEPTION_FAILED.name()
+            );
             MDCTracer.removeDetailId();
         }
     }
