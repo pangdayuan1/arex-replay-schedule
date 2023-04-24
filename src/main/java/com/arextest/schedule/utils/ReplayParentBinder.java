@@ -6,9 +6,7 @@ import com.arextest.schedule.model.ReplayPlan;
 import com.arextest.schedule.model.deploy.ServiceInstance;
 import org.apache.commons.collections4.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -16,6 +14,8 @@ import java.util.stream.Collectors;
  * @since 2021/10/12
  */
 public final class ReplayParentBinder {
+
+    private static final String HTTP_PROTOCOL = "http";
     private ReplayParentBinder() {
 
     }
@@ -41,13 +41,20 @@ public final class ReplayParentBinder {
     }
 
     private static List<ServiceInstance> filterTargetInstance(List<ServiceInstance> instances) {
+        if (CollectionUtils.isEmpty(instances)) {
+            return Collections.emptyList();
+        }
+
         List<ServiceInstance> filterInstance= new ArrayList<>();
         Map<String, List<ServiceInstance>> collect = instances.stream().collect(Collectors.groupingBy(ServiceInstance::getIp));
         collect.forEach((k, v) -> {
-            if (v.size() > 1) {
-                filterInstance.add(v.stream().filter(i -> "http".equalsIgnoreCase(i.getProtocol())).findFirst().get());
-            }else {
-                filterInstance.add(v.get(0));
+            if (v != null && v.size() > 1) {
+                Optional<ServiceInstance> serviceInstance = v.stream().filter(i -> i != null && HTTP_PROTOCOL.equalsIgnoreCase(i.getProtocol())).findFirst();
+                serviceInstance.ifPresent(filterInstance::add);
+            }else if (v != null && v.size() == 1){
+                if (v.get(0) != null) {
+                    filterInstance.add(v.get(0));
+                }
             }
         });
         return filterInstance;
