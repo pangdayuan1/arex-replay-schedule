@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * @author jmo
@@ -41,21 +40,14 @@ public class ReplayPlanController {
 
     @PostMapping(value = "/api/createPlan")
     @ResponseBody
-    public CommonResponse createPlan(@RequestBody BuildReplayPlanRequest request) {
-        if (request == null) {
-            return CommonResponse.badResponse("The request empty not allowed");
-        }
-        try {
-            MDCTracer.addAppId(request.getAppId());
-            fillOptionalValueIfRequestMissed(request);
-            return planProduceService.createPlan(request);
-        } catch (Throwable e) {
-            LOGGER.error("create plan error: {} , request: {}", e.getMessage(), request, e);
-            return CommonResponse.badResponse("create plan error！" + e.getMessage());
-        } finally {
-            planProduceService.removeCreating(request.getAppId(), request.getTargetEnv());
-            MDCTracer.clear();
-        }
+    public CommonResponse createPlanPost(@RequestBody BuildReplayPlanRequest request) {
+        return createPlan(request);
+    }
+
+    @GetMapping(value = "/api/createPlan")
+    @ResponseBody
+    public CommonResponse createPlanGet(BuildReplayPlanRequest request) {
+        return createPlan(request);
     }
 
     @GetMapping("/api/stopPlan")
@@ -127,7 +119,7 @@ public class ReplayPlanController {
             return CommonResponse.badResponse("create plan error！" + e.getMessage());
         } finally {
             MDCTracer.clear();
-            planProduceService.removeCreating(request.getAppId());
+            planProduceService.removeCreating(request.getAppId(), request.getTargetEnv());
         }
     }
 }
