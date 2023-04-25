@@ -43,12 +43,6 @@ public final class HttpWepServiceApiClient {
     @Value("${arex.read.time.out}")
     private int readTimeOut;
 
-
-    @Value("${arex.connect.time.out}")
-    private int connectTimeOut;
-    @Value("${arex.read.time.out}")
-    private int readTimeOut;
-
     @PostConstruct
     private void initRestTemplate() {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
