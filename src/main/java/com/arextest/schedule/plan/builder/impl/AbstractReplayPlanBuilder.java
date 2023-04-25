@@ -9,7 +9,7 @@ import com.arextest.schedule.model.plan.BuildReplayPlanRequest;
 import com.arextest.schedule.plan.PlanContext;
 import com.arextest.schedule.plan.builder.BuildPlanValidateResult;
 import com.arextest.schedule.plan.builder.ReplayPlanBuilder;
-import com.arextest.schedule.service.DeployedEnvironmentService;
+import com.arextest.schedule.service.DefaultDeployedEnvironmentService;
 import com.arextest.schedule.service.ReplayActionItemPreprocessService;
 import com.arextest.schedule.service.ReplayCaseRemoteLoadService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -28,7 +28,8 @@ abstract class AbstractReplayPlanBuilder implements ReplayPlanBuilder {
     static final int APP_SUSPENDED_STATUS = -1;
     private final static String DEFAULT_PRO_SOURCE_ENV = "pro";
     @Resource
-    private DeployedEnvironmentService deployedEnvironmentService;
+    private DefaultDeployedEnvironmentService deployedEnvironmentService;
+
     @Resource
     private ReplayCaseRemoteLoadService replayCaseRemoteLoadService;
     @Resource

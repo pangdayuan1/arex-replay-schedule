@@ -7,7 +7,6 @@ import com.arextest.schedule.model.ReplayActionItem;
 import com.arextest.schedule.model.deploy.DeploymentVersion;
 import com.arextest.schedule.model.deploy.ServiceInstance;
 import com.arextest.schedule.model.deploy.ServiceInstanceOperation;
-import com.arextest.schedule.service.DeployedEnvironmentService;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import org.apache.commons.collections4.CollectionUtils;
@@ -33,10 +32,6 @@ public final class PlanContext {
     private DeploymentVersion sourceVersion;
     private String appId;
 
-    @Resource
-    private DeployedEnvironmentService service;
-
-
     public AppServiceOperationDescriptor findAppServiceOperationDescriptor(String operationId) {
         List<AppServiceOperationDescriptor> operationDescriptorList;
         for (AppServiceDescriptor appServiceDescriptor : appServiceDescriptorList) {
@@ -59,11 +54,15 @@ public final class PlanContext {
 
     private List<ServiceInstance> getActiveInstance(Function<AppServiceDescriptor, List<ServiceInstance>> source) {
         List<ServiceInstance> instanceList = Lists.newArrayList();
-        Optional<AppServiceDescriptor> any = appServiceDescriptorList.stream().filter(
-                data -> data.getServiceName() != MockCategoryType.Q_MESSAGE_CONSUMER.getName() &&
-                        data.getServiceName() != MockCategoryType.SERVLET.getName()).findAny();
-        if (any.isPresent()) {
-            instanceList.addAll(source.apply(any.get()));
+        for (AppServiceDescriptor descriptor : appServiceDescriptorList) {
+            if (CollectionUtils.isEmpty(descriptor.getTargetActiveInstanceList())) {
+                break;
+            }
+            List<ServiceInstance> targetActiveInstanceList = descriptor.getTargetActiveInstanceList();
+            if (StringUtils.isEmpty(targetActiveInstanceList.get(0).getIp())) {
+                break;
+            }
+            instanceList.addAll(source.apply(descriptor));
         }
         return instanceList;
     }
@@ -86,13 +85,22 @@ public final class PlanContext {
     }
 
     public List<ServiceInstance> sourceActiveInstance() {
-        Optional<AppServiceDescriptor> any = appServiceDescriptorList.stream().filter(
-                data -> CollectionUtils.isNotEmpty(data.getSourceActiveInstanceList())).findAny();
-        if (any.isPresent()) {
-            return getActiveInstance(AppServiceDescriptor::getSourceActiveInstanceList);
-        } else {
-            return Collections.emptyList();
+        return getSourceActiveInstance(AppServiceDescriptor::getSourceActiveInstanceList);
+    }
+
+    private List<ServiceInstance> getSourceActiveInstance(Function<AppServiceDescriptor, List<ServiceInstance>> source) {
+        List<ServiceInstance> instanceList = Lists.newArrayList();
+        for (AppServiceDescriptor descriptor : appServiceDescriptorList) {
+            if (CollectionUtils.isEmpty(descriptor.getSourceActiveInstanceList())) {
+                break;
+            }
+            List<ServiceInstance> sourceActiveInstanceList = descriptor.getSourceActiveInstanceList();
+            if (StringUtils.isEmpty(sourceActiveInstanceList.get(0).getIp())) {
+                break;
+            }
+            instanceList.addAll(source.apply(descriptor));
         }
+        return instanceList;
     }
 
     public ReplayActionItem toReplayAction(AppServiceOperationDescriptor operationDescriptor) {
@@ -105,17 +113,15 @@ public final class PlanContext {
         AppServiceDescriptor serviceDescriptor = operationDescriptor.getParent();
         replayActionItem.setAppId(serviceDescriptor.getAppId());
         final String operationName = operationDescriptor.getOperationName();
-        String operationType = operationDescriptor.getOperationType();
-        String shortOperationName = getShortOperationName(operationType, operationName);
-        List<ServiceInstance> activeInstances = findActiveInstances(serviceDescriptor, shortOperationName, operationType);
-        replayActionItem.setTargetInstance(activeInstances);
+        replayActionItem.setTargetInstance(serviceDescriptor.getTargetActiveInstanceList());
+        replayActionItem.setSourceInstance(serviceDescriptor.getSourceActiveInstanceList());
         replayActionItem.setOperationName(operationName);
         replayActionItem.setSourceInstance(serviceDescriptor.getSourceActiveInstanceList());
         replayActionItem.setActionType(operationType);
         replayActionItem.setServiceKey(serviceDescriptor.getServiceKey());
         replayActionItem.setServiceName(serviceDescriptor.getServiceName());
         replayActionItem.setOperationId(operationDescriptor.getId());
-        replayActionItem.setMappedInstanceOperation(this.findActiveOperation(shortOperationName, activeInstances));
+        replayActionItem.setMappedInstanceOperation(this.findActiveOperation(operationName, serviceDescriptor.getTargetActiveInstanceList().get(0)));
     }
 
     private ServiceInstanceOperation findActiveOperation(String operation, List<ServiceInstance> activeInstances) {

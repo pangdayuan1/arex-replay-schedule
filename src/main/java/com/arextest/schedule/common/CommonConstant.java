@@ -18,11 +18,13 @@ public final class CommonConstant {
     public static final int OPERATION_MAX_CASE_COUNT = 1000;
     public static final String DOT = ".";
     public static final String JSON_START = "{";
+    public static final String JSON_ARRAY_START = "[";
     public static final String X_AREX_EXCLUSION_OPERATIONS = "X-AREX-Exclusion-Operations";
 
     public static final long CREATE_PLAN_REDIS_EXPIRE = TimeUnit.MINUTES.toSeconds(5);
     public static final long STOP_PLAN_REDIS_EXPIRE = TimeUnit.DAYS.toSeconds(1);
     public static final String STOP_PLAN_REDIS_KEY = "arex.stop.plan.";
+    public static final String SOA_PROVIDER = "SOAProvider";
 
     public static final String SOAPROVIDER = "SOAProvider";
 
