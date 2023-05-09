@@ -242,7 +242,6 @@ public class ReplayCaseTransmitService {
         LOGGER.info("prepare remote dependency version: {} , result: {} , {} -> {}", replayDependency, prepareResult,
                 caseItem.getParent().getServiceName(), caseItem.getParent().getOperationName());
         watch.stop();
-        LOGGER.info("console type SWITCH_DEPENDENCY_VERSION_TIME {} ", watch.getTotalTimeMillis());
         metricService.recordTimeEvent(LogType.SWITCH_DEPENDENCY_VERSION_TIME.getValue(), caseItem.getParent().getPlanId(),
                 caseItem.getParent().getAppId(), null, watch.getTotalTimeMillis());
         return prepareResult;

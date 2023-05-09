@@ -55,8 +55,8 @@ public class PlanProduceService {
     private CacheProvider redisCacheProvider;
 
     public CommonResponse createPlan(BuildReplayPlanRequest request) {
-        StopWatch sw = new StopWatch();
-        sw.start(LogType.PLAN_EXECUTION_DELAY.getValue());
+
+        long planCreateMillis = System.currentTimeMillis();
         String appId = request.getAppId();
         if (isCreating(appId, request.getTargetEnv())) {
             return CommonResponse.badResponse("This appid is creating plan");
@@ -75,7 +75,8 @@ public class PlanProduceService {
             return CommonResponse.badResponse("appId:" + appId + " error: empty replay actions");
         }
         ReplayPlan replayPlan = build(request, planContext);
-        replayPlan.setExecutionDelayWatch(sw);
+
+        replayPlan.setPlanCreateMillis(planCreateMillis);
         replayPlan.setReplayActionItemList(replayActionItemList);
         ReplayParentBinder.setupReplayActionParent(replayActionItemList, replayPlan);
         int planCaseCount = planBuilder.buildReplayCaseCount(replayActionItemList);

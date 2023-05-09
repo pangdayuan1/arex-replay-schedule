@@ -65,12 +65,12 @@ public final class PlanConsumeService {
     }
 
     private void saveActionCaseToSend(ReplayPlan replayPlan) {
-        StopWatch sw = replayPlan.getExecutionDelayWatch();
-        sw.stop();
-        metricService.recordTimeEvent(LogType.PLAN_EXECUTION_DELAY.getValue(), replayPlan.getId(), replayPlan.getAppId(), null,
-                sw.getTotalTimeMillis());
+
         MDCTracer.addPlanId(replayPlan.getId());
         MDCTracer.addAppId(replayPlan.getAppId());
+
+        metricService.recordTimeEvent(LogType.PLAN_EXECUTION_DELAY.getValue(), replayPlan.getId(), replayPlan.getAppId(), null,
+                System.currentTimeMillis() - replayPlan.getPlanCreateMillis());
         int planSavedCaseSize = saveAllActionCase(replayPlan.getReplayActionItemList());
         if (planSavedCaseSize != replayPlan.getCaseTotalCount()) {
             LOGGER.info("update the plan TotalCount, plan id:{} ,appId: {} , size: {} -> {}", replayPlan.getId(),

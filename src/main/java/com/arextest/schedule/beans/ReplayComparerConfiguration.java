@@ -31,6 +31,6 @@ public class ReplayComparerConfiguration {
                 sourceRemoteLoader,
                 progressTracer,
                 comparisonOutputWriter,
-                caseItemRepository, metricService);
+               caseItemRepository, metricService);
     }
 }

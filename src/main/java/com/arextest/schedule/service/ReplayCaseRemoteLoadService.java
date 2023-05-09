@@ -7,6 +7,7 @@ import com.arextest.model.mock.Mocker.Target;
 import com.arextest.model.replay.*;
 import com.arextest.schedule.client.HttpWepServiceApiClient;
 import com.arextest.schedule.common.CommonConstant;
+
 import com.arextest.schedule.model.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,7 +43,6 @@ public class ReplayCaseRemoteLoadService {
     private ObjectMapper objectMapper;
     @Resource
     private MetricService metricService;
-
 
     public int queryCaseCount(ReplayActionItem replayActionItem) {
         try {
@@ -112,17 +112,15 @@ public class ReplayCaseRemoteLoadService {
         requestType.setBeginTime(beginTimeMills);
         requestType.setEndTime(endTimeMills);
         PagedResponseType responseType;
-        long beginTime = System.currentTimeMillis();
+
         StopWatch watch = new StopWatch();
         watch.start(LogType.LOAD_CASE_TIME.getValue());
         responseType = wepApiClientService.jsonPost(replayCaseUrl, requestType, PagedResponseType.class);
-        long timeUsed = System.currentTimeMillis() - beginTime;
+        watch.stop();
         LOGGER.info("get replay case app id:{},time used:{} ms, operation:{}",
                 requestType.getAppId(),
-                timeUsed, requestType.getOperation()
+                watch.getTotalTimeMillis(), requestType.getOperation()
         );
-        watch.stop();
-        LOGGER.info("console type LOAD_CASE_TIME {} ", watch.getTotalTimeMillis());
         metricService.recordTimeEvent(LogType.LOAD_CASE_TIME.getValue(), replayActionItem.getPlanId(),
                 replayActionItem.getAppId(), null, watch.getTotalTimeMillis());
         if (badResponse(responseType)) {

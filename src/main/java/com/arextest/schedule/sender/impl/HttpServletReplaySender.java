@@ -14,6 +14,7 @@ import com.arextest.schedule.sender.SenderParameters;
 import com.arextest.schedule.service.MetricService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -26,6 +27,7 @@ import javax.annotation.Resource;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
+
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -35,6 +37,7 @@ import java.util.regex.Pattern;
 final class HttpServletReplaySender extends AbstractReplaySender {
     @Resource
     private HttpWepServiceApiClient httpWepServiceApiClient;
+
     @Resource
     private ObjectMapper objectMapper;
     @Resource
@@ -85,13 +88,6 @@ final class HttpServletReplaySender extends AbstractReplaySender {
     }
 
 
-    private Map<String, String> newHeadersIfEmpty(Map<String, String> source) {
-        if (MapUtils.isEmpty(source)) {
-            return new HashMap<>();
-        }
-        return source;
-    }
-
     private boolean doSend(ReplayActionItem replayActionItem, ReplayActionCaseItem caseItem,
                            Map<String, String> headers) {
         ServiceInstance instanceRunner = getServiceInstance(caseItem, replayActionItem.getTargetInstance());
@@ -114,7 +110,7 @@ final class HttpServletReplaySender extends AbstractReplaySender {
         senderParameter.setHeaders(headers);
         senderParameter.setMethod(caseItem.requestMethod());
         senderParameter.setRecordId(caseItem.getRecordId());
-        //todo get messageId from transaction and we will optimize it later.
+        //todo get log message id and will optimize it later.
         String messageId = metricService.generateMessageIdEvent(headers, instanceRunner.getUrl());
         StopWatch watch = new StopWatch();
         watch.start(LogType.DO_SEND.getValue());
@@ -256,9 +252,6 @@ final class HttpServletReplaySender extends AbstractReplaySender {
         return MediaType.parseMediaType(format);
     }
 
-    private boolean isReplayRequest(Map<?, ?> requestHeaders) {
-        return MapUtils.isNotEmpty(requestHeaders) && requestHeaders.containsKey(CommonConstant.AREX_RECORD_ID);
-    }
 
     private ReplaySendResult fromHttpResult(Map<?, ?> requestHeaders, String url, ResponseEntity<?> responseEntity) {
         HttpHeaders responseHeaders = null;
@@ -288,23 +281,6 @@ final class HttpServletReplaySender extends AbstractReplaySender {
         return ReplaySendResult.success(resultId, StringUtils.EMPTY, url);
     }
 
-    private String encodeResponseAsString(Object responseBody) {
-        if (responseBody == null) {
-            return null;
-        }
-        if (responseBody instanceof String) {
-            return (String) responseBody;
-        }
-        if (responseBody instanceof byte[]) {
-            return Base64.getEncoder().encodeToString((byte[]) responseBody);
-        }
-        try {
-            return objectMapper.writeValueAsString(responseBody);
-        } catch (JsonProcessingException e) {
-            LOGGER.warn("encodeAsString error:{}", e.getMessage(), e);
-        }
-        return null;
-    }
 
     private String replayResultId(Map<?, ?> responseHeaders) {
         if (MapUtils.isEmpty(responseHeaders)) {
