@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-07-10T14:53:45.806Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="AZBDjCtJ8H6FxfCkVK_C" version="24.6.4" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-11T01:32:45.215Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="SvXiWAM6_g3yoPlAofcj" version="24.6.4" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="2620" dy="915" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="4486" dy="1983" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -175,7 +175,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="GbRqIvFZk893x_S-Il0t-72" value="&lt;font color=&quot;#e01010&quot;&gt;&lt;b&gt;AP数据回放时，&lt;br&gt;发生业务逻辑变更&lt;/b&gt;&lt;/font&gt;" style="rhombus;whiteSpace=wrap;html=1;shadow=0;fontFamily=Helvetica;fontSize=12;align=center;strokeWidth=1;spacing=6;spacingTop=-4;fillColor=#f8cecc;strokeColor=#b85450;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="GbRqIvFZk893x_S-Il0t-72" value="&lt;font style=&quot;font-size: 14px;&quot; color=&quot;#e01010&quot;&gt;&lt;b&gt;AP数据回放时，&lt;br&gt;发生业务逻辑变更&lt;/b&gt;&lt;/font&gt;" style="rhombus;whiteSpace=wrap;html=1;shadow=0;fontFamily=Helvetica;fontSize=12;align=center;strokeWidth=1;spacing=6;spacingTop=-4;fillColor=#f8cecc;strokeColor=#b85450;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="1337.11" y="630" width="225.16" height="95" as="geometry" />
         </mxCell>
         <mxCell id="GbRqIvFZk893x_S-Il0t-78" value="&lt;b&gt;更新AP表case，打上状态标识&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontColor=#f60404;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
@@ -184,8 +184,8 @@
         <mxCell id="GbRqIvFZk893x_S-Il0t-79" value="&lt;b&gt;yes&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#ff0000;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="1260" y="657.7099999999999" width="40" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="GbRqIvFZk893x_S-Il0t-80" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;回放路径表新增状态字段&lt;/font&gt;&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;status:【正常、失效、变更&lt;span style=&quot;background-color: initial;&quot;&gt;】&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="1640" y="465" width="310" height="70" as="geometry" />
+        <mxCell id="GbRqIvFZk893x_S-Il0t-80" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b style=&quot;&quot;&gt;1. 回放路径表&lt;/b&gt;：&lt;i style=&quot;&quot;&gt;ReplayScenePool=pool&lt;/i&gt;，含有caseId、路径code&lt;br&gt;&lt;br&gt;&lt;b style=&quot;&quot;&gt;2. 全量回放case表&lt;/b&gt;：AP&lt;br&gt;&lt;br&gt;3. 在AP里新增状态字段，&lt;/font&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;status:【&lt;b&gt;正常、失效、变更&lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;】&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;sketch=1;curveFitting=1;jiggle=2;align=left;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1654" y="410" width="410" height="115" as="geometry" />
         </mxCell>
         <mxCell id="GbRqIvFZk893x_S-Il0t-82" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;sketch=1;curveFitting=1;jiggle=2;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="GbRqIvFZk893x_S-Il0t-81" target="GbRqIvFZk893x_S-Il0t-57">
           <mxGeometry relative="1" as="geometry" />
@@ -205,16 +205,16 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="GbRqIvFZk893x_S-Il0t-95" value="&lt;span style=&quot;color: rgb(251, 4, 4);&quot;&gt;&lt;b&gt;update 状态【&lt;font style=&quot;font-size: 12px;&quot;&gt;变更&lt;/font&gt;】&lt;/b&gt;&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];sketch=1;curveFitting=1;jiggle=2;" vertex="1" connectable="0" parent="GbRqIvFZk893x_S-Il0t-94">
+        <mxCell id="GbRqIvFZk893x_S-Il0t-95" value="&lt;span style=&quot;color: rgb(251, 4, 4);&quot;&gt;&lt;b&gt;update 状态【&lt;span style=&quot;font-size: 12px;&quot;&gt;无效&lt;/span&gt;】&lt;/b&gt;&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];sketch=1;curveFitting=1;jiggle=2;" vertex="1" connectable="0" parent="GbRqIvFZk893x_S-Il0t-94">
           <mxGeometry x="0.0555" y="1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="GbRqIvFZk893x_S-Il0t-96" value="业务逻辑变更判断：" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="1640" y="642.2900000000001" width="310" height="70" as="geometry" />
+        <mxCell id="GbRqIvFZk893x_S-Il0t-96" value="&lt;font style=&quot;font-size: 15px;&quot;&gt;&lt;b&gt;业务逻辑变更判断：&lt;br&gt;&lt;/b&gt;同个case，和上一次回放的路径code不一样&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;sketch=1;curveFitting=1;jiggle=2;align=left;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1654" y="642.2900000000001" width="310" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="GbRqIvFZk893x_S-Il0t-97" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;回放路径表新增状态字段&lt;/font&gt;&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;status:【正常、失效、变更&lt;span style=&quot;background-color: initial;&quot;&gt;】&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="1690" y="810" width="310" height="70" as="geometry" />
+        <mxCell id="GbRqIvFZk893x_S-Il0t-97" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;相同路径判断：&lt;br&gt;&lt;/b&gt;路径code一样，但是caseId不一样&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;sketch=1;curveFitting=1;jiggle=2;align=left;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="1654" y="780" width="310" height="70" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
