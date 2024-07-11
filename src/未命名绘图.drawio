@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-07-11T10:37:43.020Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="MUzXrEPie86tDoUAMCyl" version="24.6.4" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-11T10:37:57.380Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="ilwRayNCLXttBjqEDmYC" version="24.6.4" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="3754" dy="1586" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -134,7 +134,7 @@
         <mxCell id="GbRqIvFZk893x_S-Il0t-65" value="将路径绑定到新case" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;sketch=1;curveFitting=1;jiggle=2;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="1373.1200000000001" y="969.9999999999999" width="153.76" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="GbRqIvFZk893x_S-Il0t-66" value="rolling回放的case&lt;br&gt;将本case所有mocker从Rolling移到AP" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;sketch=1;curveFitting=1;jiggle=2;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="GbRqIvFZk893x_S-Il0t-66" value="rolling case&lt;br&gt;将本case所有mocker从Rolling移到AP" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;sketch=1;curveFitting=1;jiggle=2;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="1329.9999999999998" y="1034.58" width="240" height="50" as="geometry" />
         </mxCell>
         <mxCell id="GbRqIvFZk893x_S-Il0t-67" value="&lt;b&gt;AS IS&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;sketch=1;curveFitting=1;jiggle=2;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
