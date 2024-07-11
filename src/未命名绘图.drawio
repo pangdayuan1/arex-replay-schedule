@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-07-11T02:10:22.161Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="WnImWaGovRwcfaRihkVB" version="24.6.4" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-11T02:14:01.509Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="WN0YVyhmGCK4HiubETXV" version="24.6.4" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="3079" dy="1220" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -222,7 +222,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="GbRqIvFZk893x_S-Il0t-102" value="&lt;span style=&quot;color: rgb(251, 4, 4);&quot;&gt;&lt;b&gt;update 状态【&lt;span style=&quot;font-size: 12px;&quot;&gt;无效&lt;/span&gt;】&lt;/b&gt;&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];sketch=1;curveFitting=1;jiggle=2;" vertex="1" connectable="0" parent="GbRqIvFZk893x_S-Il0t-101">
+        <mxCell id="GbRqIvFZk893x_S-Il0t-102" value="&lt;span style=&quot;color: rgb(251, 4, 4);&quot;&gt;&lt;b&gt;update 状态【&lt;span style=&quot;font-size: 12px;&quot;&gt;正常&lt;/span&gt;】&lt;/b&gt;&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];sketch=1;curveFitting=1;jiggle=2;" vertex="1" connectable="0" parent="GbRqIvFZk893x_S-Il0t-101">
           <mxGeometry x="0.0555" y="1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
